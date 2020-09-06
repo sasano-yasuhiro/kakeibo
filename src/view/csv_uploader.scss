@@ -2,4 +2,10 @@
   width: auto;
   height: auto;
 }
-
+.raw_tbl{
+  border-collapse:collapse;
+  border: ridge;
+  tr, td {
+    border: ridge;
+  }
+}

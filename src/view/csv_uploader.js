@@ -71,7 +71,7 @@ export default class CsvUploader extends React.Component{
       <div>
         {csv_data.length > 0 &&
           csv_data[0].map( (d, i) =>
-           <div key={'row_one_'+i} hidden={d?false:true}>
+           <div key={'row_one_'+i}> 
              <input
                type="checkbox"
                defaultValue={i}
@@ -91,10 +91,25 @@ export default class CsvUploader extends React.Component{
     )
   }
   render_csv_table(){
+    let csv_data = this.state.csv_data
+    let title = this.state.title
     return(
-      <table>
+      <table className="raw_tbl">
+        <thead>
+        </thead>
         <tbody>
-          <tr></tr>
+          {csv_data.map( (row_data, row)=>
+          <tr key={'r'+row}>
+            {row_data.map( (d, col)=>
+              <td
+                key={'rd'+col}
+                hidden={title[col].check?false:true}
+              >
+                {d}
+              </td>
+            )}
+          </tr>
+          )}
         </tbody>
       </table>
     )
