@@ -11,13 +11,13 @@ export default class CsvUploader extends React.Component{
       csv_data: [],
       title: [],
     }
-    this.onFileLoaded = this.onFileLoaded.bind(this)
     this.format = [
       { value: 'sjis',  label: 'sjis'  },
       { value: 'utf-8',  label: 'utf-8'  },
     ];
   }
   onFileLoaded(data){
+    //console.log("onFileLoaded")
     let title= [];
     for(let i=0; i < data[0].length; i++){
       title.push({check:false, value:""})
@@ -26,6 +26,9 @@ export default class CsvUploader extends React.Component{
       csv_data: data,
       title: title,
     })
+  }
+  onError(){
+    console.log("onError")
   }
   onSelect(e){
     this.setState({encode: e.target.value})
@@ -45,7 +48,8 @@ export default class CsvUploader extends React.Component{
       <div className='csv_uploader'>
         {this.render_encoding()}
         <CSVReader
-          onFileLoaded={this.onFileLoaded}
+          onFileLoaded={this.onFileLoaded.bind(this)}
+          onError={this.onError.bind(this)}
           fileEncoding={this.state.encode}
         />
         {this.render_row_one()}
@@ -68,7 +72,7 @@ export default class CsvUploader extends React.Component{
   render_row_one(){
     let csv_data = this.state.csv_data
     return(
-      <div>
+      <div className='select_display_columns'>
         {csv_data.length > 0 &&
           csv_data[0].map( (d, i) =>
            <div key={'row_one_'+i}> 
@@ -94,12 +98,22 @@ export default class CsvUploader extends React.Component{
     let csv_data = this.state.csv_data
     let title = this.state.title
     return(
-      <table className="raw_tbl">
+      <table className="selected_columns_table">
         <thead>
+          <tr>
+          {title.map( (d, col)=>
+            <th
+              key={'rhd'+col}
+              hidden={d.check?false:true}
+            >
+                {d.value?d.value:csv_data[0][col]}
+            </th>
+          )}
+          </tr>
         </thead>
         <tbody>
           {csv_data.map( (row_data, row)=>
-          <tr key={'r'+row}>
+            <tr key={'r'+row}>
             {row_data.map( (d, col)=>
               <td
                 key={'rd'+col}
@@ -108,7 +122,7 @@ export default class CsvUploader extends React.Component{
                 {d}
               </td>
             )}
-          </tr>
+            </tr>
           )}
         </tbody>
       </table>

@@ -2,10 +2,12 @@
   width: auto;
   height: auto;
 }
-.raw_tbl{
+.select_display_columns{
+}
+.selected_columns_table{
   border-collapse:collapse;
   border: ridge;
-  tr, td {
+  th, tr, td {
     border: ridge;
   }
 }
