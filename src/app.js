@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Kakeibo from './view/kakeibo';
 
-console.log('Hello World!!!!');
-
-let element = undefined;
+let element = <Kakeibo/>
 ReactDOM.render(
   element,
   document.getElementById('app')
