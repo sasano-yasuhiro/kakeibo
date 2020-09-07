@@ -43,6 +43,12 @@ export default class CsvUploader extends React.Component{
     title[e.target.id].value = e.target.value
     this.setState({title: title})
   }
+  filter_load(){
+    console.log("filter_load")
+  }
+  filter_create(){
+    console.log("filter_create")
+  }
   render(){
     return(
       <div>
@@ -76,6 +82,8 @@ export default class CsvUploader extends React.Component{
   {
     return(
       <div className='csv_filter'>
+        <input type="button" value='load' onClick={this.filter_load.bind(this)}/>
+        <input type="button" value='create'onClick={this.filter_create.bind(this)}/>
       </div>
     )
   }
