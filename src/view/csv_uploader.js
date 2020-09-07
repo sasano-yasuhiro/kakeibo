@@ -29,7 +29,7 @@ export default class CsvUploader extends React.Component{
   onSelect(e){
     this.setState({encode: e.target.value})
   }
-  toggleCheck(e){
+  selectRadio(e){
     let title= this.state.title
     title[e.target.name]= e.target.value
     this.setState({title: title})
@@ -97,7 +97,7 @@ export default class CsvUploader extends React.Component{
                   value={i}
                   name={col}
                   checked={title[col] == i}
-                  onChange={this.toggleCheck.bind(this)}
+                  onChange={this.selectRadio.bind(this)}
                   key={i}
                 />
               )}
