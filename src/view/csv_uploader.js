@@ -45,31 +45,41 @@ export default class CsvUploader extends React.Component{
   }
   render(){
     return(
+      <div>
+        {this.render_csv_uploader()}
+        {this.render_csv_filter()}
+        {this.render_select_display_cols()}
+        {this.render_csv_table()}
+      </div>
+    )
+  }
+  render_csv_uploader(){
+    return(
       <div className='csv_uploader'>
-        {this.render_encoding()}
+        <select
+          defaultValue={this.state.encode}
+          onChange={this.onSelect.bind(this)}
+        >
+          {this.format.map( d =>
+            <option key={d.value} value={d.value}>{d.label}</option>
+          )}
+        </select>
         <CSVReader
           onFileLoaded={this.onFileLoaded.bind(this)}
           onError={this.onError.bind(this)}
           fileEncoding={this.state.encode}
         />
-        {this.render_row_one()}
-        {this.render_csv_table()}
       </div>
     )
   }
-  render_encoding(){
+  render_csv_filter()
+  {
     return(
-      <select
-        defaultValue={this.state.encode}
-        onChange={this.onSelect.bind(this)}
-      >
-        {this.format.map( d =>
-          <option key={d.value} value={d.value}>{d.label}</option>
-        )}
-      </select>
+      <div className='csv_filter'>
+      </div>
     )
   }
-  render_row_one(){
+  render_select_display_cols(){
     let csv_data = this.state.csv_data
     return(
       <div className='select_display_columns'>
