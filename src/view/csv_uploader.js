@@ -15,16 +15,12 @@ export default class CsvUploader extends React.Component{
       { value: 'sjis',  label: 'sjis'  },
       { value: 'utf-8',  label: 'utf-8'  },
     ];
+    this.display_cols = ["date","category","money"];
   }
   onFileLoaded(data){
-    //console.log("onFileLoaded")
-    let title= [];
-    for(let i=0; i < data[0].length; i++){
-      title.push({check:false, value:""})
-    }
     this.setState({
       csv_data: data,
-      title: title,
+      title: new Array(data[0].length),
     })
   }
   onError(){
@@ -35,7 +31,7 @@ export default class CsvUploader extends React.Component{
   }
   toggleCheck(e){
     let title= this.state.title
-    title[e.target.value].check = !title[e.target.value].check 
+    title[e.target.name]= e.target.value
     this.setState({title: title})
   }
   onChange(e){
@@ -89,24 +85,23 @@ export default class CsvUploader extends React.Component{
   }
   render_select_display_cols(){
     let csv_data = this.state.csv_data
+    let title = this.state.title
     return(
       <div className='select_display_columns'>
         {csv_data.length > 0 &&
-          csv_data[0].map( (d, i) =>
-           <div key={'row_one_'+i}> 
-             <input
-               type="checkbox"
-               defaultValue={i}
-               checked={this.state.title[i].check}
-               onChange={this.toggleCheck.bind(this)}
-             />
-             <span>{d}</span>
-             <input
-               id={i}
-               type='text'
-               defaultValue={this.state.title[i].value}
-               onChange={this.onChange.bind(this)}
-             />
+          csv_data[0].map((data, col) =>
+            <div key={col}>
+              {this.display_cols.map((dummy,i) =>
+                <input
+                  type="radio"
+                  value={i}
+                  name={col}
+                  checked={title[col] == i}
+                  onChange={this.toggleCheck.bind(this)}
+                  key={i}
+                />
+              )}
+              <span>{data}</span>
            </div>
         )}
       </div>
@@ -119,23 +114,23 @@ export default class CsvUploader extends React.Component{
       <table className="selected_columns_table">
         <thead>
           <tr>
-          {title.map( (d, col)=>
+          {title.map((d, col)=>
             <th
-              key={'rhd'+col}
-              hidden={d.check?false:true}
+              key={col}
+              hidden={d?false:true}
             >
-                {d.value?d.value:csv_data[0][col]}
+              {this.display_cols[d]}
             </th>
           )}
           </tr>
         </thead>
         <tbody>
           {csv_data.map( (row_data, row)=>
-            <tr key={'r'+row}>
-            {row_data.map( (d, col)=>
+            <tr key={row}>
+            {row_data.map((d, col)=>
               <td
-                key={'rd'+col}
-                hidden={title[col].check?false:true}
+                key={col}
+                hidden={title[col]?false:true}
               >
                 {d}
               </td>
