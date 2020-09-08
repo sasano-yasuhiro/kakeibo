@@ -15,7 +15,7 @@ export default class CsvUploader extends React.Component{
       { value: 'sjis',  label: 'sjis'  },
       { value: 'utf-8',  label: 'utf-8'  },
     ];
-    this.display_cols = ["date","category","money"];
+    this.display_cols = ["date","item","money"];
   }
   onFileLoaded(data){
     this.setState({
@@ -30,8 +30,12 @@ export default class CsvUploader extends React.Component{
     this.setState({encode: e.target.value})
   }
   selectRadio(e){
-    let title= this.state.title
-    title[e.target.name]= e.target.value
+    let title = this.state.title
+    let index = title.indexOf(e.target.value)
+    if(index !== -1){
+      title[index] = null
+    }
+    title[e.target.name] = e.target.value
     this.setState({title: title})
   }
   onChange(e){
