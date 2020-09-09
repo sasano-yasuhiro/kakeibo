@@ -10,6 +10,7 @@ export default class CsvUploader extends React.Component{
       encode: 'sjis',
       csv_data: [],
       title: [],
+      out_csv: [],
     }
     this.format = [
       { value: 'sjis',  label: 'sjis'  },
@@ -49,6 +50,22 @@ export default class CsvUploader extends React.Component{
   filter_create(){
     console.log("filter_create")
   }
+  csv_download(){
+    console.log("csv_download")
+    let in_csv= this.state.csv_data
+    let out_csv= [this.display_cols.slice()]
+    let title= this.state.title
+    let cols=[]
+    title.map((d,i)=>d?cols.push(i):null)
+    in_csv.map(d=>{
+      let data = []
+      cols.map(i=>{
+        data.push(d[i])
+      })
+      out_csv.push(data)
+    })
+    this.setState({out_csv: out_csv})
+  }
   render(){
     return(
       <div>
@@ -84,6 +101,7 @@ export default class CsvUploader extends React.Component{
       <div className='csv_filter'>
         <input type="button" value='load' onClick={this.filter_load.bind(this)}/>
         <input type="button" value='create'onClick={this.filter_create.bind(this)}/>
+        <input type="button" value='download'onClick={this.csv_download.bind(this)}/>
       </div>
     )
   }
