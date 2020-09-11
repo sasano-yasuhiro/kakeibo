@@ -10,6 +10,7 @@ export default class CsvUploader extends React.Component{
       encode: 'sjis',
       csv_data: [],
       title: [],
+      selected_data: {},
       out_csv: [],
     }
     this.format = [
@@ -38,6 +39,32 @@ export default class CsvUploader extends React.Component{
     }
     title[e.target.name] = e.target.value
     this.setState({title: title})
+    this.set_selected_data(title)
+    this.set_output_csv()
+  }
+  set_selected_data(title){
+    let selected_data={date:[],item:[],money:[]}
+    title.map((t,i)=>{
+      this.state.csv_data.map(d =>{
+        if(t){
+          selected_data[this.display_cols[t]].push(d[i])
+        }
+      }
+    )})
+    this.setState({selected_data: selected_data})
+  }
+  set_output_csv(){
+    let cols=[]
+    let out_csv= []
+    this.state.title.map((d,i)=>d?cols.push(i):null)
+    this.state.csv_data.map(d=>{
+      let data = []
+      cols.map(i=>{
+        data.push(d[i])
+      })
+      out_csv.push(data)
+    })
+    this.setState({out_csv: out_csv})
   }
   onChange(e){
     let title= this.state.title
@@ -52,19 +79,6 @@ export default class CsvUploader extends React.Component{
   }
   csv_download(){
     console.log("csv_download")
-    let in_csv= this.state.csv_data
-    let out_csv= [this.display_cols.slice()]
-    let title= this.state.title
-    let cols=[]
-    title.map((d,i)=>d?cols.push(i):null)
-    in_csv.map(d=>{
-      let data = []
-      cols.map(i=>{
-        data.push(d[i])
-      })
-      out_csv.push(data)
-    })
-    this.setState({out_csv: out_csv})
   }
   render(){
     return(
@@ -136,14 +150,9 @@ export default class CsvUploader extends React.Component{
       <table className="selected_columns_table">
         <thead>
           <tr>
-          {title.map((d, col)=>
-            <th
-              key={col}
-              hidden={d?false:true}
-            >
-              {this.display_cols[d]}
-            </th>
-          )}
+            {Object.keys(this.state.selected_data).map((d, col)=>
+              <th key={col}>{d}</th>
+            )}
           </tr>
         </thead>
         <tbody>
