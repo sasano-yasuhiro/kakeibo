@@ -1,5 +1,6 @@
 import React from 'react';
 import CSVReader from 'react-csv-reader'
+import ItemGroup from './item_group'
 
 import './csv_uploader.scss'
 
@@ -86,6 +87,7 @@ export default class CsvUploader extends React.Component{
       <div>
         {this.render_csv_uploader()}
         {this.render_csv_filter()}
+        <ItemGroup items={this.state.select_group_items}/>
         {this.render_select_display_cols()}
         {this.render_csv_table()}
       </div>
