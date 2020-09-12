@@ -10,7 +10,7 @@ export default class CsvUploader extends React.Component{
       encode: 'sjis',
       csv_data: [],
       title: [],
-      selected_data: {},
+      select_group_items: [],
       out_csv: [],
     }
     this.format = [
@@ -39,19 +39,20 @@ export default class CsvUploader extends React.Component{
     }
     title[e.target.name] = e.target.value
     this.setState({title: title})
-    this.set_selected_data(title)
+    this.set_group_items(title)
     this.set_output_csv()
   }
-  set_selected_data(title){
-    let selected_data={date:[],item:[],money:[]}
+  set_group_items(title){
+    let items=[]
     title.map((t,i)=>{
       this.state.csv_data.map(d =>{
-        if(t){
-          selected_data[this.display_cols[t]].push(d[i])
+        if(t==1){
+          items.push(d[i])
         }
       }
     )})
-    this.setState({selected_data: selected_data})
+    items = Array.from(new Set(items))
+    this.setState({select_group_items: items})
   }
   set_output_csv(){
     let cols=[]
@@ -120,19 +121,17 @@ export default class CsvUploader extends React.Component{
     )
   }
   render_select_display_cols(){
-    let csv_data = this.state.csv_data
-    let title = this.state.title
     return(
       <div className='select_display_columns'>
-        {csv_data.length > 0 &&
-          csv_data[0].map((data, col) =>
+        {this.state.csv_data.length > 0 &&
+          this.state.csv_data[0].map((data, col) =>
             <div key={col}>
               {this.display_cols.map((dummy,i) =>
                 <input
                   type="radio"
                   value={i}
                   name={col}
-                  checked={title[col] == i}
+                  checked={this.state.title[col] == i}
                   onChange={this.selectRadio.bind(this)}
                   key={i}
                 />
@@ -144,27 +143,24 @@ export default class CsvUploader extends React.Component{
     )
   }
   render_csv_table(){
-    let csv_data = this.state.csv_data
-    let title = this.state.title
     return(
       <table className="selected_columns_table">
         <thead>
           <tr>
-            {Object.keys(this.state.selected_data).map((d, col)=>
-              <th key={col}>{d}</th>
-            )}
+            {this.state.title.map((d, col)=>{
+              if(d!=null){
+                return(
+                  <th key={col}>{this.display_cols[d]}</th>
+                )
+              }
+            })}
           </tr>
         </thead>
         <tbody>
-          {csv_data.map( (row_data, row)=>
+          {this.state.out_csv.map((row_data, row)=>
             <tr key={row}>
             {row_data.map((d, col)=>
-              <td
-                key={col}
-                hidden={title[col]?false:true}
-              >
-                {d}
-              </td>
+              <td key={col}>{d}</td>
             )}
             </tr>
           )}
